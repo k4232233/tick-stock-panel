@@ -33,7 +33,7 @@ def _user_data_root() -> Path:
       - 用户体验: 用户选了安装目录, 自然期望「程序和数据都在这」, 单一总目录更直观。
       - 数据安全: Inno Setup 覆盖安装(升级)时只往 {app} 写新程序文件, 不会清空
         目录里不在安装清单上的运行时文件 (data/ 即此类), 故覆盖安装不丢数据。
-        (注意: 卸载时需在 .iss 中豁免 data/, 见 packaging/tickflow.iss 的 [UninstallDelete]。)
+        (注意: 卸载时需在 .iss 中豁免 data/, 见 packaging/tsp.iss 的 [UninstallDelete]。)
     旧版本数据迁移: 见 DataStore._migrate_legacy_data_dir(), 老用户首次启动自动搬迁。
     """
     # 打包桌面版: exe 同级的 data/ 子目录 (与程序同一总目录, 覆盖安装不丢数据)
@@ -102,6 +102,8 @@ class Settings(BaseSettings):
     # 上下文 128000 对齐当前主流模型底线 (GPT/Claude/GLM/DeepSeek/Kimi 均 ≥128k); 可在 AI 设置里调整。
     ai_max_output_tokens: int = 16384
     ai_context_window: int = 128000
+    # AI 助手工具轮次检查点: 连续 N 轮工具调用未完成时弹「继续/停止」卡; 0=不检查。
+    ai_round_checkpoint: int = 100
 
     # Server
     host: str = "0.0.0.0"
